@@ -39,6 +39,12 @@ public class Colosseum {
     static Scanner myScan;
 
     /**
+     * Max value for pokeType.
+     */
+
+    static final int MAX_POKETYPE = 3;
+
+    /**
      * We are now reimplementing this to meet our new Pokemon specifications. <br>
      * The process will still be the same for getting the information from the user,
      * but now we are adding the feature where the user can pick what TYPE of
@@ -53,7 +59,7 @@ public class Colosseum {
      * Requirements we should check the user for: <br>
      * - The type of Pokemon is 1 of the 3 choices <br>
      * - Hit points are between 1 and MAX_HIT_POINTS <br>
-     * - No more than 50 points are split between attack level and defense leve <br>
+     * - No more than 50 points are split between attack level and defense level <br>
      * - Attack level and defense level must have at least 1 point each <br>
      * Example of how this will look to the user:
      * <p>
@@ -102,8 +108,82 @@ public class Colosseum {
      * (Look, we can return objects too!)
      */
     public static Pokemon buildPokemon() {
-        Pokemon returnPokemon = null;
-        return returnPokemon;
+        Scanner lineScanner = new Scanner(System.in);
+        System.out.println("Please name your Pokemon:");
+        String name = lineScanner.nextLine();
+        printTypeMenu();
+        int pokeType = lineScanner.nextInt();
+        while (pokeType > MAX_POKETYPE || pokeType < 1) {
+            if (pokeType > MAX_POKETYPE) {
+                System.out.println("Sorry, you must pick either 1, 2, or 3.");
+                pokeType = lineScanner.nextInt();
+            } else if (pokeType < 1) {
+                System.out.println("Sorry, you must pick either 1, 2, or 3.");
+                pokeType = lineScanner.nextInt();
+            }
+        }
+        System.out.println("How many hit points will it have? (1-50):");
+        int hitPoints = lineScanner.nextInt();
+
+        while (hitPoints > MAX_HIT_POINTS || hitPoints < 1) {
+            if (hitPoints > MAX_HIT_POINTS) {
+                System.out.println("Sorry. Hit points must be between 1 and 50:");
+                hitPoints = lineScanner.nextInt();
+            } else if (hitPoints < 1) {
+                System.out.println("Sorry. Hit points must be between 1 and 50:");
+                hitPoints = lineScanner.nextInt();
+            }
+        }
+
+        System.out.println("Split your points between attack level and defense level.");
+        int maxAttackLvl = hitPoints;
+        System.out.println("Enter your attack level (1-" + maxAttackLvl + "):");
+        int attackLvl = lineScanner.nextInt();
+        while (attackLvl >= maxAttackLvl || attackLvl < 1) {
+            if (attackLvl >= maxAttackLvl) {
+                System.out.println("Sorry. The attack level must be between 1 and " + maxAttackLvl + ": ");
+                attackLvl = lineScanner.nextInt();
+            } else if (attackLvl < 1) {
+                System.out.println("Sorry. The attack level must be between 1 and " + maxAttackLvl + ": ");
+                attackLvl = lineScanner.nextInt();
+            }
+        }
+
+        int maxDefenseLvl = hitPoints - attackLvl;
+        System.out.println("Enter your defense level (1-" + maxDefenseLvl + "):");
+        int defenseLvl = lineScanner.nextInt();
+        while (defenseLvl >= maxDefenseLvl || defenseLvl < 1) {
+            if (defenseLvl >= maxDefenseLvl) {
+                System.out.println("Sorry. The defense level must be between 1 and " + maxDefenseLvl + ": ");
+                defenseLvl = lineScanner.nextInt();
+            } else if (defenseLvl < 1) {
+                System.out.println("Sorry. The defense level must be between 1 and 49: ");
+                defenseLvl = lineScanner.nextInt();
+            }
+        }
+
+        if (pokeType == 1) {
+            Pokemon tempPokemon = new ElectricPokemon();
+            tempPokemon.setName(name);
+            tempPokemon.setHitPoints(hitPoints);
+            tempPokemon.setAttackLevel(attackLvl);
+            tempPokemon.setDefenseLevel(defenseLvl);
+            return tempPokemon;
+        } else if (pokeType == 2) {
+            Pokemon tempPokemon = new FirePokemon();
+            tempPokemon.setName(name);
+            tempPokemon.setHitPoints(hitPoints);
+            tempPokemon.setAttackLevel(attackLvl);
+            tempPokemon.setDefenseLevel(defenseLvl);
+            return tempPokemon;
+        } else {
+            Pokemon tempPokemon = new WaterPokemon();
+            tempPokemon.setName(name);
+            tempPokemon.setHitPoints(hitPoints);
+            tempPokemon.setAttackLevel(attackLvl);
+            tempPokemon.setDefenseLevel(defenseLvl);
+            return tempPokemon;
+        }
     }
 
     /**
